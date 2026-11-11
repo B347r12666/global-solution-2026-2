@@ -1,7 +1,51 @@
+import { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
+
+import Header from './components/Header'
+import Sidebar from './components/Sidebar'
+import BottomNav from './components/BottomNav'
+
+import Home from './pages/Home'
+import Rotas from './pages/Rotas'
+import DetalhesViagem from './pages/DetalhesViagem'
+import Linhas from './pages/Linhas'
+import Relatos from './pages/Relatos'
+import Tarifas from './pages/Tarifas'
+import Avisos from './pages/Avisos'
+import Favoritos from './pages/Favoritos'
+
 function App() {
+  const [menuAberto, setMenuAberto] = useState(false)
+
   return (
-    <div>
-      
+    <div className="min-h-screen flex flex-col">
+
+      <Header
+        menuAberto={menuAberto}
+        setMenuAberto={setMenuAberto}
+      />
+
+      <div className="flex flex-1 min-h-0">
+
+        <Sidebar aberta={menuAberto} />
+
+        <main className="flex-1 min-w-0 p-5 pb-24 md:pb-5">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/rotas" element={<Rotas />} />
+            <Route path="/viagem" element={<DetalhesViagem />} />
+            <Route path="/linhas" element={<Linhas />} />
+            <Route path="/relatos" element={<Relatos />} />
+            <Route path="/tarifas" element={<Tarifas />} />
+            <Route path="/avisos" element={<Avisos />} />
+            <Route path="/favoritos" element={<Favoritos />} />
+          </Routes>
+        </main>
+
+      </div>
+
+      <BottomNav />
+
     </div>
   )
 }
