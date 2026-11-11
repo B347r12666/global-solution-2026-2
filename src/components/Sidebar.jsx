@@ -15,17 +15,11 @@ function Sidebar({ aberta }) {
     ]
 
     return (
-        <aside className={`${aberta ? 'w-64' : 'w-0'} shrink-0 overflow-hidden bg-cinza-escuro text-white transition-all duration-300 flex flex-col`}>
-
-            <div className="px-5 pt-6 mb-6 whitespace-nowrap">
-                <h1 className="text-2xl font-bold text-white">
-                    Side <span className="text-vermelho-medio">Bar</span>
-                </h1>
-            </div>
-
+        <aside className={`fixed inset-y-0 left-0 z-40 w-64 ${aberta ? 'translate-x-0 md:w-64' : '-translate-x-full md:w-0'} shrink-0 overflow-hidden bg-cinza-escuro text-white transition-all duration-300 flex flex-col md:sticky md:top-0 md:left-auto md:z-auto md:h-screen md:translate-x-0`}>
+          
             <nav className="flex flex-1 flex-col justify-center gap-2 p-5">
 
-                  <div className="hidden md:flex flex-col gap-2">
+                <div className="hidden md:flex flex-col gap-2">
                     {menuResponsivo.map((item) => (
                         <NavLink
                             key={item.rota}
@@ -49,7 +43,7 @@ function Sidebar({ aberta }) {
                         </NavLink>
                     ))}
                 </div>
-                
+
                 {menu.map((item) => (
                     <NavLink
                         key={item.rota}
