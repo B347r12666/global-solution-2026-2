@@ -1,6 +1,6 @@
-function Header({ menuAberto, setMenuAberto }) {
+function Header({ titulo, subtitulo, menuAberto, setMenuAberto }) {
     return (
-        <header className="w-full bg-cinza-escuro text-white px-6 py-4 flex items-center gap-5">
+        <header className="relative z-50 w-full bg-cinza-escuro text-white border-b border-white/10 px-3 py-6 flex items-center gap-5">
 
             <button
                 onClick={() => setMenuAberto(prev => !prev)}
@@ -13,11 +13,11 @@ function Header({ menuAberto, setMenuAberto }) {
             </button>
 
             <div className="absolute left-1/2 -translate-x-1/2 text-center">
-                <h1 className="text-2xl font-bold">
-                    Titulo <span className="text-vermelho-medio">Aqui</span>
+                <h1 className="text-2xl font-bold text-cinza-medio pt-3">
+                    {titulo}
                 </h1>
-                <p className="text-sm text-cinza-medio">
-                    Sub titulo
+                <p className="text-sm text-vermelho-claro pb-1 font-semibold italic">
+                    {subtitulo}
                 </p>
             </div>
 
