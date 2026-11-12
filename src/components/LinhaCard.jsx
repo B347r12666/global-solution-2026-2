@@ -1,5 +1,5 @@
 
-function LinhaCard({ numero, nome, cor, status }) {
+function LinhaCard({ numero, nome, cor, status, tipo, operadora }) {
   const coresStatus = {
     Normal: 'text-status-normal-tx bg-status-normal-bg',
     'Com problemas': 'text-status-problema-tx bg-status-problema-bg',
@@ -17,12 +17,12 @@ function LinhaCard({ numero, nome, cor, status }) {
         />
 
         <div>
-          <h3 className="font-bold text-cinza-escuro ">
+          <h3 className="font-bold text-cinza-escuro">
             Linha {numero} - {nome}
           </h3>
 
           <p className="text-sm text-cinza-medio">
-            Metrô / CPTM
+            {tipo}{operadora && ` • ${operadora}`}
           </p>
         </div>
       </div>
