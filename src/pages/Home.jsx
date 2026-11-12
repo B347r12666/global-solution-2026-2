@@ -19,12 +19,14 @@ function Home() {
             titulo: 'Operação normal',
             descricao: 'Circulação sem alterações no momento.',
             horario: '10:30',
+            data: '12/11/2026',
             tipo: 'info'
         },
         {
             titulo: 'Atrasos na circulação',
             descricao: 'A Linha 3-Vermelha apresenta lentidão.',
             horario: '09:45',
+            data: '12/11/2026',
             tipo: 'alerta'
         }
     ]
