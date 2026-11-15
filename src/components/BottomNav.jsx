@@ -20,33 +20,37 @@ function BottomNav() {
     ]
 
     return (
-        <nav className="fixed bottom-0 left-0 w-full bg-cinza-escuro text-white border-t border-white/10 px-2 py-3 z-50 md:hidden">
+        <>
+            <nav className="fixed bottom-0 left-0 w-full bg-cinza-escuro text-white border-t border-white/10 px-2 py-3 z-50 md:hidden">
 
-            <div className="flex items-center justify-around">
+                <div className="flex items-center justify-around">
 
-                {menu.map((item) => (
-                    <NavLink
-                        key={item.rota}
-                        to={item.rota}
-                        end={item.rota === '/'}
-                        className={({ isActive }) =>
-                            `flex flex-col items-center justify-center gap-1 min-w-0 px-2 transition-all
+                    {menu.map((item) => (
+                        <NavLink
+                            key={item.rota}
+                            to={item.rota}
+                            end={item.rota === '/'}
+                            className={({ isActive }) =>
+                                `flex flex-col items-center justify-center gap-1 min-w-0 px-2 transition-all
                             ${isActive
-                                ? 'text-vermelho-medio'
-                                : 'text-cinza-medio hover:text-white'
-                            }`
-                        }
-                    >
-                        <i className={`fa-solid ${item.icone} text-lg`}></i>
+                                    ? 'text-vermelho-medio'
+                                    : 'text-cinza-medio hover:text-white'
+                                }`
+                            }
+                        >
+                            <i className={`fa-solid ${item.icone} text-lg`}></i>
 
-                        <span className="text-xs font-medium">
-                            {item.nome}
-                        </span>
-                    </NavLink>
-                ))}
+                            <span className="text-xs font-medium">
+                                {item.nome}
+                            </span>
+                        </NavLink>
+                    ))}
 
-            </div>
-        </nav>
+                </div>
+                
+            </nav>
+
+        </>
     )
 }
 

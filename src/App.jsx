@@ -7,7 +7,6 @@ import BottomNav from './components/BottomNav'
 
 import Home from './pages/Home'
 import Rotas from './pages/Rotas'
-import DetalhesViagem from './pages/DetalhesViagem'
 import Linhas from './pages/Linhas'
 import Relatos from './pages/Relatos'
 import Tarifas from './pages/Tarifas'
@@ -51,7 +50,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/rotas" element={<Rotas />} />
-            <Route path="/viagem" element={<DetalhesViagem />} />
             <Route path="/linhas" element={<Linhas />} />
             <Route path="/relatos" element={<Relatos />} />
             <Route path="/tarifas" element={<Tarifas />} />

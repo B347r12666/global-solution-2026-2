@@ -6,30 +6,33 @@ function AvisoCard({ titulo, descricao, horario, data, tipo }) {
   }
 
   return (
-    <div className="bg-cinza-escuro rounded-xl p-4 flex items-start gap-3 lg:my-2 lg:mx-20">
+    <>
+      <div className="bg-cinza-escuro rounded-xl p-4 flex items-start gap-3 lg:my-2 lg:mx-20">
 
-      <div className="text-xl">
-        {iconesTipo[tipo]}
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between gap-2">
-          <h3 className="font-bold text-titulo">
-            {titulo}
-          </h3>
+        <div className="text-xl">
+          {iconesTipo[tipo]}
         </div>
 
-        <p className="text-sm text-cinza-medio mt-1">
-          {descricao}
-        </p>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <h3 className="font-bold text-titulo">
+              {titulo}
+            </h3>
+          </div>
 
-        <div className="flex items-center justify-between mt-2 text-xs text-cinza-medio">
-          <span>{horario}</span>
-          <span>{data}</span>
+          <p className="text-sm text-cinza-medio mt-1">
+            {descricao}
+          </p>
+
+          <div className="flex items-center justify-between mt-2 text-xs text-cinza-medio">
+            <span>{horario}</span>
+            <span>{data}</span>
+          </div>
         </div>
+
       </div>
 
-    </div>
+    </>
   )
 }
 

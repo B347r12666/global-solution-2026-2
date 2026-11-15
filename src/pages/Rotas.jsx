@@ -31,6 +31,7 @@ function Rotas() {
 
   return (
     <>
+
       <div className="flex items-center justify-between pt-5 lg:pt-10">
         <div>
           <h2 className="text-xl font-bold text-titulo pl-2 pt-2 border-t-2 border-vermelho-escuro lg:my-2 lg:ml-20">
@@ -51,6 +52,7 @@ function Rotas() {
 
         <EtapasViagem etapas={etapas} />
       </div>
+
     </>
 
 

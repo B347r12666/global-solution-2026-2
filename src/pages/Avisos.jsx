@@ -87,83 +87,87 @@ function Avisos() {
     }
 
     return (
-        <div className="flex flex-col gap-6">
+        <>
 
-            <section className="flex flex-col gap-4">
+            <div className="flex flex-col gap-6">
 
-                <div className="flex items-center justify-between pt-5 lg:pt-10">
-                    <div>
-                        <h2 className="text-xl font-bold text-titulo pl-2 pt-2 border-t-2 border-vermelho-escuro lg:my-2 lg:ml-20">
-                            Central de avisos
-                        </h2>
+                <section className="flex flex-col gap-4">
 
-                        <p className="text-sm text-cinza-medio pl-2 pb-2 lg:my-2 lg:ml-20">
-                            Acompanhe as ocorrências do transporte.
-                        </p>
+                    <div className="flex items-center justify-between pt-5 lg:pt-10 lg:w-90 w-65">
+                        <div>
+                            <h2 className="text-xl font-bold text-titulo pl-2 pt-2 border-t-2 border-vermelho-escuro lg:my-2 lg:ml-20 ">
+                                Central de avisos
+                            </h2>
+
+                            <p className="text-sm text-cinza-medio pl-2 pb-2 lg:my-2 lg:ml-20">
+                                Acompanhe as ocorrências do transporte.
+                            </p>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <section className="flex flex-col gap-2">
+                <section className="flex flex-col gap-2">
 
-                <h3 className="text-sm font-semibold italic text-cinza-claro lg:my-2 lg:ml-20 lg:text-[16px]">
-                    Filtrar avisos
-                </h3>
-
-                <div className="flex flex-nowrap gap-1 overflow-x-auto justify-center">
-
-                    {filtros.map((item) => (
-                        <button
-                            key={item}
-                            onClick={() => setFiltro(item)}
-                            className={`px-3 py-1 rounded-4xl text-[11.8px] lg:text-sm font-semibold transition-all
-                                ${filtro === item
-                                    ? 'bg-vermelho-escuro text-white'
-                                    : 'bg-cinza-escuro text-cinza-medio hover:bg-sombra-vermelho'
-                                }`}
-                        >
-                            {item} <span className=' italic font-light text-white/50'>({quantidadeFiltro[item]})</span>
-                        </button>
-                    ))}
-
-                </div>
-
-            </section>
-
-            <section className="flex flex-col gap-4 lg:my-2 lg:ml-20">
-
-                <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-titulo">
-                        {filtro === 'Todos' ? 'Avisos recentes' : filtro}
+                    <h3 className="text-sm font-semibold italic text-cinza-claro lg:my-2 lg:ml-20 lg:text-[16px]">
+                        Filtrar avisos
                     </h3>
 
-                </div>
+                    <div className="flex flex-nowrap gap-1 overflow-x-auto justify-center">
 
-                {avisosFiltrados.length > 0 ? (
-                    avisosFiltrados.map((aviso) => (
-                        <div key={aviso.id} className="flex flex-col gap-2">
-                            <p className="text-xs lg:text-sm  text-cinza-medio">
-                                {aviso.linha}
-                            </p>
+                        {filtros.map((item) => (
+                            <button
+                                key={item}
+                                onClick={() => setFiltro(item)}
+                                className={`px-3 py-1 rounded-4xl text-[11.8px] lg:text-sm font-semibold transition-all
+                                ${filtro === item
+                                        ? 'bg-vermelho-escuro text-white'
+                                        : 'bg-cinza-escuro text-cinza-medio hover:bg-sombra-vermelho'
+                                    }`}
+                            >
+                                {item} <span className=' italic font-light text-white/50'>({quantidadeFiltro[item]})</span>
+                            </button>
+                        ))}
 
-                            <AvisoCard
-                                titulo={aviso.titulo}
-                                descricao={aviso.descricao}
-                                horario={aviso.horario}
-                                data={aviso.data}
-                                tipo={aviso.tipo}
-                            />
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-center text-cinza-medio  italic py-8">
-                        Nenhum aviso encontrado nesta categoria.
-                    </p>
-                )}
+                    </div>
 
-            </section>
+                </section>
 
-        </div>
+                <section className="flex flex-col gap-4 lg:my-2 lg:ml-20">
+
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-bold text-titulo">
+                            {filtro === 'Todos' ? 'Avisos recentes' : filtro}
+                        </h3>
+
+                    </div>
+
+                    {avisosFiltrados.length > 0 ? (
+                        avisosFiltrados.map((aviso) => (
+                            <div key={aviso.id} className="flex flex-col gap-2">
+                                <p className="text-xs lg:text-sm  text-cinza-medio">
+                                    {aviso.linha}
+                                </p>
+
+                                <AvisoCard
+                                    titulo={aviso.titulo}
+                                    descricao={aviso.descricao}
+                                    horario={aviso.horario}
+                                    data={aviso.data}
+                                    tipo={aviso.tipo}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-center text-cinza-medio  italic py-8">
+                            Nenhum aviso encontrado nesta categoria.
+                        </p>
+                    )}
+
+                </section>
+
+            </div>
+
+        </>
     )
 }
 
