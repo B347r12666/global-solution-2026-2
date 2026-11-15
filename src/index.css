@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @theme {
   --color-cor-de-fundo: #373737;
@@ -28,4 +29,20 @@
   --color-alerta: #ffba08;
   --color-urgente: #dc2f02;
 
+}
+
+.marcador-origem {
+  background: transparent;
+  border: none;
+  color: #16a34a;
+  font-size: 30px;
+  text-align: center;
+}
+
+.marcador-destino {
+  background: transparent;
+  border: none;
+  color: #a71930;
+  font-size: 27px;
+  text-align: center;
 }
