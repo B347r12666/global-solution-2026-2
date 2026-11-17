@@ -1,13 +1,12 @@
-import TarifaCard from '../components/TarifaCard'
-import BeneficioCard from '../components/BeneficioCard'
-import TabelaTarifas from '../components/TabelaTarifas'
-import Calculadora from '../components/Calculadora'
+import TarifaCard from "../components/TarifaCard";
+import BeneficioCard from "../components/BeneficioCard";
+import TabelaTarifas from "../components/TabelaTarifas";
+import Calculadora from "../components/Calculadora";
 
 function Tarifas() {
   return (
     <>
       <div className="flex flex-col gap-6">
-
         <section className="flex flex-col gap-4">
           <div className="flex items-center justify-between pt-5 lg:pt-10">
             <div>
@@ -16,8 +15,8 @@ function Tarifas() {
               </h2>
 
               <p className="text-sm text-cinza-medio pl-2 pb-2 lg:my-2 lg:ml-20 lg:w-90 w-65">
-                Consulte os preços do transporte público, compare tarifas
-                e descubra os benefícios disponíveis.
+                Consulte os preços do transporte público, compare tarifas e
+                descubra os benefícios disponíveis.
               </p>
             </div>
           </div>
@@ -67,9 +66,7 @@ function Tarifas() {
           <div className="lg:mx-20">
             <Calculadora />
           </div>
-
         </section>
-
 
         <section className="flex flex-col gap-4">
           <h3 className="text-sm font-semibold italic text-cinza-claro lg:my-2 lg:ml-20 lg:text-[16px]">
@@ -77,7 +74,6 @@ function Tarifas() {
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 lg:mx-20">
-
             <BeneficioCard
               icone="fa-solid fa-graduation-cap"
               nome="Estudante"
@@ -117,19 +113,16 @@ function Tarifas() {
               valor="R$ 0,00"
               link="https://www.sptrans.com.br/tarifas/"
             />
-
           </div>
 
           <p className="text-xs text-cinza-medio lg:mx-20 italic">
-            A gratuidade depende do atendimento aos critérios de cada benefício e da modalidade de transporte.
+            A gratuidade depende do atendimento aos critérios de cada benefício
+            e da modalidade de transporte.
           </p>
         </section>
-
-      </div >
-
+      </div>
     </>
-
-  )
+  );
 }
 
-export default Tarifas
+export default Tarifas;

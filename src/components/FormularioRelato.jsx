@@ -1,8 +1,6 @@
-
-import { useState } from 'react'
+import { useState } from "react";
 
 function FormularioRelato() {
-
   const [avaliacoes, setAvaliacoes] = useState({
     conservacao: 0,
     atendimento: 0,
@@ -10,17 +8,17 @@ function FormularioRelato() {
     limpeza: 0,
     arCondicionado: 0,
     acessibilidade: 0,
-    equipe: 0
-  })
+    equipe: 0,
+  });
 
-  const [comentario, setComentario] = useState('')
+  const [comentario, setComentario] = useState("");
 
   const avaliar = (campo, nota) => {
     setAvaliacoes({
       ...avaliacoes,
-      [campo]: nota
-    })
-  }
+      [campo]: nota,
+    });
+  };
 
   const renderEstrelas = (campo) => (
     <div className="flex gap-1 shrink-0">
@@ -28,25 +26,24 @@ function FormularioRelato() {
         <i
           key={nota}
           onClick={() => avaliar(campo, nota)}
-          className={`fa-solid fa-star cursor-pointer transition-colors ${nota <= avaliacoes[campo]
-            ? 'text-yellow-400'
-            : 'text-cinza-medio'
-            }`}
+          className={`fa-solid fa-star cursor-pointer transition-colors ${
+            nota <= avaliacoes[campo] ? "text-yellow-400" : "text-cinza-medio"
+          }`}
         ></i>
       ))}
     </div>
-  )
+  );
 
   const enviarRelato = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     console.log({
       avaliacoes,
-      comentario
-    })
+      comentario,
+    });
 
-    alert('Relato enviado com sucesso!')
-  }
+    alert("Relato enviado com sucesso!");
+  };
 
   return (
     <>
@@ -54,17 +51,13 @@ function FormularioRelato() {
         onSubmit={enviarRelato}
         className="flex flex-col gap-6 bg-cinza-escuro text-white rounded-2xl p-5 w-full max-w-300 mx-auto"
       >
-
-        <h2 className="text-lg font-bold text-titulo">
-          Avalie esta viagem
-        </h2>
+        <h2 className="text-lg font-bold text-titulo">Avalie esta viagem</h2>
 
         <div className="flex flex-col gap-4">
-
           {[
-            ['Conservação', 'conservacao'],
-            ['Atendimento', 'atendimento'],
-            ['Segurança', 'seguranca']
+            ["Conservação", "conservacao"],
+            ["Atendimento", "atendimento"],
+            ["Segurança", "seguranca"],
           ].map(([nome, campo]) => (
             <div
               key={campo}
@@ -74,20 +67,16 @@ function FormularioRelato() {
               {renderEstrelas(campo)}
             </div>
           ))}
-
         </div>
 
         <div className="flex flex-col gap-4">
-
-          <h3 className="font-semibold text-titulo">
-            Condições observadas
-          </h3>
+          <h3 className="font-semibold text-titulo">Condições observadas</h3>
 
           {[
-            ['Limpeza do veículo', 'limpeza'],
-            ['Ar-condicionado', 'arCondicionado'],
-            ['Acessibilidade', 'acessibilidade'],
-            ['Atendimento da equipe', 'equipe']
+            ["Limpeza do veículo", "limpeza"],
+            ["Ar-condicionado", "arCondicionado"],
+            ["Acessibilidade", "acessibilidade"],
+            ["Atendimento da equipe", "equipe"],
           ].map(([nome, campo]) => (
             <div
               key={campo}
@@ -97,14 +86,10 @@ function FormularioRelato() {
               {renderEstrelas(campo)}
             </div>
           ))}
-
         </div>
 
         <div className="flex flex-col gap-3">
-
-          <label className="font-semibold text-titulo">
-            Comentário
-          </label>
+          <label className="font-semibold text-titulo">Comentário</label>
 
           <textarea
             value={comentario}
@@ -113,7 +98,6 @@ function FormularioRelato() {
             rows="4"
             className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio resize-none"
           />
-
         </div>
 
         <button
@@ -122,10 +106,9 @@ function FormularioRelato() {
         >
           Enviar relato
         </button>
-
       </form>
     </>
-  )
+  );
 }
 
-export default FormularioRelato
+export default FormularioRelato;

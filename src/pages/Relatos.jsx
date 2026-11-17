@@ -1,18 +1,18 @@
-import FormularioRelato from '../components/FormularioRelato'
-import ComentarioCard from '../components/ComentarioCard'
+import FormularioRelato from "../components/FormularioRelato";
+import ComentarioCard from "../components/ComentarioCard";
 
 function Relatos() {
   return (
     <>
       <div className="flex flex-col gap-5 pb-10">
-
         <section className="flex flex-col gap-2 pt-5 lg:pt-10">
           <h2 className="text-xl font-bold text-titulo pl-2 pt-2 border-t-2 border-vermelho-escuro lg:my-2 lg:ml-20 lg:w-90 w-65">
             Relatos e avaliações
           </h2>
 
           <p className="text-sm text-cinza-medio pl-2 pb-3 lg:my-2 lg:ml-20 lg:w-90 w-65">
-            Compartilhe sua experiência e ajude outras pessoas a terem viagens melhores.
+            Compartilhe sua experiência e ajude outras pessoas a terem viagens
+            melhores.
           </p>
         </section>
 
@@ -33,11 +33,9 @@ function Relatos() {
             />
           </div>
         </section>
-
       </div>
-
     </>
-  )
+  );
 }
 
-export default Relatos
+export default Relatos;
