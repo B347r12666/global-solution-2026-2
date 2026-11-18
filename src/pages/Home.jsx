@@ -4,11 +4,13 @@ import LinhaCard from "../components/LinhaCard";
 import AvisoCard from "../components/AvisoCard";
 import { useEffect, useState } from "react";
 import { listarLinhas } from "../api/endpoints/linhas";
+import { listarAvisos } from "../api/endpoints/avisos";
 
 function Home() {
   const navigate = useNavigate();
 
   const [linhas, setLinhas] = useState([]);
+  const [avisos, setAvisos] = useState([]);
 
   useEffect(() => {
     const buscarLinhas = async () => {
@@ -17,30 +19,25 @@ function Home() {
 
         setLinhas(res.data);
       } catch (err) {
-        console.err(err);
+        console.error(err);
         setLinhas([]);
       }
     };
 
-    buscarLinhas();
-  }, []);
+    const buscarAvisos = async () => {
+      try {
+        const res = await listarAvisos(2);
 
-  const avisos = [
-    {
-      titulo: "Operação normal",
-      descricao: "Circulação sem alterações no momento.",
-      horario: "10:30",
-      data: "12/11/2026",
-      tipo: "info",
-    },
-    {
-      titulo: "Atrasos na circulação",
-      descricao: "A Linha 3-Vermelha apresenta lentidão.",
-      horario: "09:45",
-      data: "12/11/2026",
-      tipo: "alerta",
-    },
-  ];
+        setAvisos(res.data);
+      } catch (err) {
+        console.error(err);
+        setAvisos([]);
+      }
+    };
+
+    buscarLinhas();
+    buscarAvisos();
+  }, []);
 
   return (
     <>
