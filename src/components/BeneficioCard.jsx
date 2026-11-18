@@ -1,4 +1,5 @@
 function BeneficioCard({ icone, nome, descricao, valor, link }) {
+function BeneficioCard({ icone, nome, descricao, valor, link }) {
   return (
     <>
       <div className="flex items-center gap-3 p-3 rounded-xl bg-cinza-escuro border border-cinza-medio/50">
