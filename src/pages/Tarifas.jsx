@@ -1,9 +1,62 @@
 import TarifaCard from "../components/TarifaCard";
 import BeneficioCard from "../components/BeneficioCard";
-import TabelaTarifas from "../components/TabelaTarifas";
+// import TabelaTarifas from "../components/TabelaTarifas";
 import Calculadora from "../components/Calculadora";
+import { useEffect, useState } from "react";
+import { listarTarifas } from "../api/endpoints/tarifas";
 
 function Tarifas() {
+  const [tarifas, setTarifas] = useState([]);
+
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    const buscarTarifas = async () => {
+      try {
+        setCarregando(true);
+        setErro("");
+
+        const res = await listarTarifas();
+
+        setTarifas(res.data);
+      } catch (err) {
+        console.error(err);
+        setErro("Erro ao buscar tarifas");
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    buscarTarifas();
+  }, []);
+
+
+  const getIcon = (nome) => {
+    switch (nome) {
+      case "Ônibus":
+        return ["fa-solid fa-bus"]
+        
+      case "CPTM":
+        return ["fa-solid fa-train"]
+
+      case "Metrô":
+        return ["fa-solid fa-train-subway"]
+
+      case "Ônibus + CPTM":
+        return ["fa-solid fa-bus", "fa-solid fa-train"]
+
+      case "Ônibus + Metrô":
+        return ["fa-solid fa-bus", "fa-solid fa-train-subway"]
+
+      case "Ônibus + Metrô + CPTM":
+        return ["fa-solid fa-bus", "fa-solid fa-train-subway", "fa-solid fa-train"]
+
+      default:
+        return []
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col gap-6">
@@ -27,35 +80,25 @@ function Tarifas() {
             Tarifas por transporte
           </h3>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:my-2 lg:mx-20">
-            <TarifaCard
-              icone="fa-solid fa-bus"
-              nome="Ônibus"
-              valor="R$ --"
-              descricao="Tarifa municipal"
-            />
-
-            <TarifaCard
-              icone="fa-solid fa-train-subway"
-              nome="Metrô"
-              valor="R$ --"
-              descricao="Tarifa básica"
-            />
-
-            <TarifaCard
-              icone="fa-solid fa-train"
-              nome="Trem"
-              valor="R$ --"
-              descricao="Tarifa básica"
-            />
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-4">
-          <h3 className="text-sm font-semibold italic text-cinza-claro lg:my-2 lg:ml-20 lg:text-[16px]">
-            Comparação de tarifas
-          </h3>
-          <TabelaTarifas />
+          {carregando ? (
+            <p className="text-center text-cinza-medio py-8">
+              Carregando tarifas...
+            </p>
+          ) : erro ? (
+            <p className="text-center text-red-500 py-8">{erro}</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:my-2 lg:mx-20">
+              {tarifas.map(tarifa => (
+                <TarifaCard 
+                  key={tarifa.id}
+                  nome={tarifa.id.slice(8)}
+                  valor={`R$ ${tarifa.preco.toFixed(2)}`}
+                  duracao={tarifa.duracao_baldeacao_min}
+                  icones={getIcon(tarifa.id.slice(8))}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="flex flex-col gap-4">
@@ -64,7 +107,7 @@ function Tarifas() {
           </h3>
 
           <div className="lg:mx-20">
-            <Calculadora />
+            <Calculadora tarifas={tarifas}/>
           </div>
         </section>
 
