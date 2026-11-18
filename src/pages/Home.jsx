@@ -2,16 +2,28 @@ import { useNavigate } from "react-router-dom";
 import BuscaTrajeto from "../components/BuscaTrajeto";
 import LinhaCard from "../components/LinhaCard";
 import AvisoCard from "../components/AvisoCard";
+import { useEffect, useState } from "react";
+import { listarLinhas } from "../api/endpoints/linhas";
 
 function Home() {
   const navigate = useNavigate();
 
-  const linhas = [
-    { numero: "1", nome: "Azul", cor: "#005CA9", status: "Normal" },
-    { numero: "3", nome: "Vermelha", cor: "#E32119", status: "Com problemas" },
-    { numero: "11", nome: "Coral", cor: "#E97D27", status: "Interrompida" },
-    { numero: "7", nome: "Rubi", cor: "#A51C30", status: "Fechada" },
-  ];
+  const [linhas, setLinhas] = useState([]);
+
+  useEffect(() => {
+    const buscarLinhas = async () => {
+      try {
+        const res = await listarLinhas("Todos", "", 4, 0);
+
+        setLinhas(res.data);
+      } catch (err) {
+        console.err(err);
+        setLinhas([]);
+      }
+    };
+
+    buscarLinhas();
+  }, []);
 
   const avisos = [
     {

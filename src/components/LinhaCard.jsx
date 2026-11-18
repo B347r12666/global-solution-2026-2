@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { desfavoritarLinha, favoritarLinha } from "../api/endpoints/favoritos";
+import { useAuth } from "../auth/AuthContext";
 
 function LinhaCard({
+  id,
   numero,
   nome,
   cor,
@@ -9,7 +12,30 @@ function LinhaCard({
   operadora,
   favorito = false,
 }) {
+  const { isAuthenticated } = useAuth();
+
   const [curtido, setCurtido] = useState(favorito);
+  const [carregando, setCarregando] = useState(false);
+
+  const favoritar = async () => {
+    if (carregando) return;
+
+    try {
+      setCarregando(true);
+
+      if (curtido) {
+        await desfavoritarLinha(id);
+        setCurtido(false);
+      } else {
+        await favoritarLinha(id);
+        setCurtido(true);
+      }
+    } catch (err) {
+      console.error("Erro ao favoritar/desfavoritar: ", err);
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   const coresStatus = {
     Normal: "text-status-normal-tx bg-status-normal-bg",
@@ -46,12 +72,14 @@ function LinhaCard({
             {status}
           </span>
 
-          <i
-            onClick={() => setCurtido(!curtido)}
-            className={`fa-solid fa-heart cursor-pointer transition-colors ${
-              curtido ? "text-vermelho-medio" : "text-cinza-medio"
-            }`}
-          ></i>
+          {isAuthenticated && (
+            <i
+              onClick={favoritar}
+              className={`fa-solid fa-heart cursor-pointer transition-colors ${
+                curtido ? "text-vermelho-medio" : "text-cinza-medio"
+              }`}
+            ></i>
+          )}
         </div>
       </div>
     </>

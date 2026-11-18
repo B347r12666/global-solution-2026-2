@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import { loginUser } from "../api/endpoints/auth";
 import axios from "axios";
+import { apiClient } from "../api/apiClient";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -20,9 +21,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     } else {
-      delete axios.defaults.headers.common["Authorization"];
+      delete apiClient.defaults.headers.common["Authorization"];
     }
   }, [token]);
 

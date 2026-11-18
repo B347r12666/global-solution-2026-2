@@ -1,7 +1,39 @@
 import { useState } from "react";
+import {
+  desfavoritarTrajeto,
+  favoritarTrajeto,
+} from "../api/endpoints/favoritos";
 
-function RotaCard({ origem, destino, transporte, tempo, favorito = false }) {
+function RotaCard({
+  id,
+  origem,
+  destino,
+  transporte,
+  tempo,
+  favorito = false,
+}) {
   const [curtido, setCurtido] = useState(favorito);
+  const [carregando, setCarregando] = useState(false);
+
+  const favoritar = async () => {
+    if (carregando) return;
+
+    try {
+      setCarregando(true);
+
+      if (curtido) {
+        await desfavoritarTrajeto(id);
+        setCurtido(false);
+      } else {
+        await favoritarTrajeto(origem, destino, transporte, tempo);
+        setCurtido(true);
+      }
+    } catch (err) {
+      console.error("Erro ao favoritar/desfavoritar: ", err);
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   return (
     <>
@@ -10,7 +42,7 @@ function RotaCard({ origem, destino, transporte, tempo, favorito = false }) {
           <span className="text-sm font-semibold text-titulo">Trajeto</span>
 
           <i
-            onClick={() => setCurtido(!curtido)}
+            onClick={favoritar}
             className={`fa-solid fa-heart cursor-pointer transition-colors ${
               curtido ? "text-vermelho-medio" : "text-cinza-medio"
             }`}

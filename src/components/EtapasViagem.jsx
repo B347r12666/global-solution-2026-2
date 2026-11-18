@@ -1,21 +1,58 @@
 import { useState } from "react";
+import {
+  desfavoritarTrajeto,
+  favoritarTrajeto,
+} from "../api/endpoints/favoritos";
+import { useAuth } from "../auth/AuthContext";
 
 function EtapasViagem({ etapas = [] }) {
+  const { isAuthenticated } = useAuth();
+
   const [curtido, setCurtido] = useState(false);
+  const [id, setId] = useState(null);
+  const [carregando, setCarregando] = useState(false);
+
+  const favoritar = async () => {
+    if (carregando) return;
+
+    try {
+      setCarregando(true);
+
+      if (curtido) {
+        await desfavoritarTrajeto(id);
+        setCurtido(false);
+      } else {
+        const res = await favoritarTrajeto(
+          etapas[0].local,
+          etapas[2].local,
+          etapas[1].tipo,
+          etapas[1].tempo,
+        );
+        setId(res.data.id);
+        setCurtido(true);
+      }
+    } catch (err) {
+      console.error("Erro ao favoritar/desfavoritar: ", err);
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   return (
     <>
       <section className="flex flex-col gap-5 bg-cinza-escuro text-white rounded-2xl p-5">
-        <div className="flex items-center justify-between italic">
-          <span className="text-sm font-semibold text-titulo">Trajeto</span>
+        {isAuthenticated && (
+          <div className="flex items-center justify-between italic">
+            <span className="text-sm font-semibold text-titulo">Trajeto</span>
 
-          <i
-            onClick={() => setCurtido(!curtido)}
-            className={`fa-solid fa-heart cursor-pointer transition-colors ${
-              curtido ? "text-vermelho-medio" : "text-cinza-medio"
-            }`}
-          ></i>
-        </div>
+            <i
+              onClick={favoritar}
+              className={`fa-solid fa-heart cursor-pointer transition-colors ${
+                curtido ? "text-vermelho-medio" : "text-cinza-medio"
+              }`}
+            ></i>
+          </div>
+        )}
 
         <div>
           <h2 className="text-lg font-bold text-titulo">Etapas da viagem</h2>

@@ -24,9 +24,6 @@ const iconeDestino = L.divIcon({
 function Mapa({ origem, destino, shapes, cor }) {
   const centro = [-23.5505, -46.6333];
 
-  console.log(origem);
-  console.log(destino);
-
   return (
     <>
       <section className="flex flex-col gap-4 bg-cinza-escuro text-white rounded-2xl p-5">

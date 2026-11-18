@@ -16,8 +16,6 @@ function Rotas() {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
 
-  console.log(origemSelecionada);
-
   useEffect(() => {
     if (!origemSelecionada || !destinoSelecionado) {
       setEtapas([]);
