@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { buscar } from "../api/endpoints/linhas";
 
 function BuscaTrajeto() {
   const navigate = useNavigate();
@@ -8,7 +10,41 @@ function BuscaTrajeto() {
 
   const [origem, setOrigem] = useState("");
   const [destino, setDestino] = useState("");
+  const [origemSelecionada, setOrigemSelecionada] = useState(null);
+  const [destinoSelecionado, setDestinoSelecionado] = useState(null);
   const [campoAtivo, setCampoAtivo] = useState("");
+
+  const [sugestoes, setSugestoes] = useState([]);
+  const [carregando, setCarregando] = useState(false);
+
+  useEffect(() => {
+    const valor = campoAtivo === "origem" ? origem : destino;
+
+    if (!campoAtivo || valor.trim().length < 2) {
+      setSugestoes([]);
+      setCarregando(false);
+      return;
+    }
+
+    const timeout = setTimeout(async () => {
+      try {
+        setCarregando(true);
+
+        const res = await buscar(valor.trim(), 5);
+
+        const paradas = res.data.filter((item) => item.categoria === "parada");
+
+        setSugestoes(paradas);
+      } catch (err) {
+        console.error("Erro ao buscar sugestões:", err);
+        setSugestoes([]);
+      } finally {
+        setCarregando(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(timeout);
+  }, [origem, destino, campoAtivo]);
 
   useEffect(() => {
     const handleClickFora = (e) => {
@@ -24,28 +60,13 @@ function BuscaTrajeto() {
     };
   }, []);
 
-  const sugestoes = [
-    { nome: "Estação Corinthians-Itaquera", tipo: "Metrô" },
-    { nome: "Estação Tatuapé", tipo: "Metrô e CPTM" },
-    { nome: "Estação Sé", tipo: "Metrô" },
-    { nome: "Estação da Luz", tipo: "Metrô e CPTM" },
-    { nome: "Estação Barra Funda", tipo: "Metrô e CPTM" },
-    { nome: "Terminal Parque Dom Pedro II", tipo: "Ônibus" },
-  ];
-
-  const filtrarSugestoes = (valor) => {
-    if (!valor.trim()) return sugestoes.slice(0, 5);
-
-    return sugestoes
-      .filter((item) => item.nome.toLowerCase().includes(valor.toLowerCase()))
-      .slice(0, 5);
-  };
-
-  const selecionarSugestao = (nome) => {
+  const selecionarSugestao = (item) => {
     if (campoAtivo === "origem") {
-      setOrigem(nome);
+      setOrigem(item.nome);
+      setOrigemSelecionada(item);
     } else {
-      setDestino(nome);
+      setDestino(item.nome);
+      setDestinoSelecionado(item);
     }
 
     setCampoAtivo("");
@@ -55,7 +76,7 @@ function BuscaTrajeto() {
     if (!origem.trim() || !destino.trim()) return;
 
     navigate("/rotas", {
-      state: { origem, destino },
+      state: { origemSelecionada, destinoSelecionado },
     });
   };
 
@@ -77,26 +98,33 @@ function BuscaTrajeto() {
               value={origem}
               onChange={(e) => setOrigem(e.target.value)}
               onFocus={() => setCampoAtivo("origem")}
-              // onBlur={() => setCampoAtivo("")}
               placeholder="Digite sua localização"
               className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
             />
 
             {campoAtivo === "origem" && (
               <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
-                {filtrarSugestoes(origem).map((item) => (
-                  <button
-                    key={item.nome}
-                    type="button"
-                    onClick={() => selecionarSugestao(item.nome)}
-                    className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
-                  >
-                    <span className="block font-medium">{item.nome}</span>
-                    <span className="text-sm text-cinza-escuro">
-                      {item.tipo}
-                    </span>
-                  </button>
-                ))}
+                {carregando ? (
+                  <p>Buscando...</p>
+                ) : sugestoes.length > 0 ? (
+                  sugestoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => selecionarSugestao(item)}
+                      className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
+                    >
+                      <span className="block font-medium">{item.nome}</span>
+                      <span className="text-sm text-cinza-escuro">
+                        {item.tipo}
+                      </span>
+                    </button>
+                  ))
+                ) : origem.trim().length >= 2 ? (
+                  <p>Nenhum resultado encontrado.</p>
+                ) : (
+                  <p className="p-3 text-sm">Digite pelo menos 2 caracteres.</p>
+                )}
               </div>
             )}
           </div>
@@ -109,26 +137,33 @@ function BuscaTrajeto() {
               value={destino}
               onChange={(e) => setDestino(e.target.value)}
               onFocus={() => setCampoAtivo("destino")}
-              // onBlur={() => setCampoAtivo("")}
               placeholder="Digite seu destino"
               className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
             />
 
             {campoAtivo === "destino" && (
               <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
-                {filtrarSugestoes(destino).map((item) => (
-                  <button
-                    key={item.nome}
-                    type="button"
-                    onClick={() => selecionarSugestao(item.nome)}
-                    className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
-                  >
-                    <span className="block font-medium">{item.nome}</span>
-                    <span className="text-sm text-cinza-escuro">
-                      {item.tipo}
-                    </span>
-                  </button>
-                ))}
+                {carregando ? (
+                  <p>Buscando...</p>
+                ) : sugestoes.length > 0 ? (
+                  sugestoes.map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => selecionarSugestao(item)}
+                      className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
+                    >
+                      <span className="block font-medium">{item.nome}</span>
+                      <span className="text-sm text-cinza-escuro">
+                        {item.tipo}
+                      </span>
+                    </button>
+                  ))
+                ) : origem.trim().length >= 2 ? (
+                  <p>Nenhum resultado encontrado.</p>
+                ) : (
+                  <p className="p-3 text-sm">Digite pelo menos 2 caracteres.</p>
+                )}
               </div>
             )}
           </div>
