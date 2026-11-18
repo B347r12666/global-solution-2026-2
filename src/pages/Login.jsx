@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 function Login() {
   const navigate = useNavigate();
+
+  const { login } = useAuth();
+
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
-  const [form, setForm] = useState({ email: "", senha: "", lembrar: true });
+  const [form, setForm] = useState({ email: "", senha: "" });
 
   function atualizarCampo(event) {
     const { name, value, checked, type } = event.target;
@@ -15,7 +19,7 @@ function Login() {
     }));
   }
 
-  function enviarFormulario(event) {
+  async function enviarFormulario(event) {
     event.preventDefault();
     setErro("");
 
@@ -24,7 +28,21 @@ function Login() {
       return;
     }
 
-    setErro("A autenticação ainda não está conectada ao servidor.");
+    try {
+      await login(form.email, form.senha);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+
+      if (err.response) {
+        const { detail } = err.response.data;
+        setErro(detail);
+
+        return;
+      }
+
+      setErro("Erro de servidor. Tente novamente mais tarde");
+    }
   }
 
   return (
@@ -34,7 +52,7 @@ function Login() {
         aria-label="Apresentação do Colosys"
       >
         <Link
-          to="/login"
+          to="/"
           className="inline-flex items-center gap-3 w-fit text-[27px] font-[850] tracking-[-1.3px] text-inherit no-underline"
           aria-label="Colosys — página inicial"
         >
@@ -42,7 +60,7 @@ function Login() {
             <i className="fa-solid fa-route" />
           </span>
           <span>
-            colosys<span className="text-[#f05b61]">.</span>
+            Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
         </Link>
 
@@ -118,7 +136,7 @@ function Login() {
             <i className="fa-solid fa-route" />
           </span>
           <span>
-            colosys<span className="text-[#f05b61]">.</span>
+            Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
         </div>
 
@@ -167,12 +185,6 @@ function Login() {
               >
                 Senha
               </label>
-              <a
-                href="mailto:suporte@colosys.com.br?subject=Recupera%C3%A7%C3%A3o%20de%20senha"
-                className="text-[#f06a72] text-[10px] font-[650] no-underline hover:underline"
-              >
-                Esqueceu a senha?
-              </a>
             </div>
             <div className="min-h-12.25 flex items-center gap-3 px-3.75 border border-[#55565a] rounded-[10px] bg-[#414143] transition-colors duration-200 focus-within:border-vermelho-medio focus-within:shadow-[0_0_0_3px_rgba(197,44,67,0.13)]">
               <i className="fa-solid fa-lock text-[#99999f] text-[13px]" />
@@ -197,20 +209,6 @@ function Login() {
                 />
               </button>
             </div>
-
-            <label className="flex items-center gap-2.5 my-1.75 mb-2.25 text-[#b8b8bd] text-[10px] leading-[1.6] cursor-pointer select-none">
-              <input
-                type="checkbox"
-                name="lembrar"
-                checked={form.lembrar}
-                onChange={atualizarCampo}
-                className="absolute w-px h-px opacity-0 peer"
-              />
-              <span className="w-4 h-4 grid shrink-0 place-items-center border border-[#68686e] rounded-sm text-transparent text-[9px] bg-[#414143] peer-checked:border-vermelho-medio peer-checked:text-white peer-checked:bg-vermelho-medio peer-focus-visible:outline-2 peer-focus-visible:outline-[#f06a72] peer-focus-visible:outline-offset-2">
-                <i className="fa-solid fa-check" />
-              </span>
-              Manter conectado
-            </label>
 
             {erro && (
               <p
@@ -252,24 +250,6 @@ function Login() {
             <i className="fa-solid fa-arrow-left" /> Voltar para o início
           </button>
         </div>
-
-        <footer className="w-full max-w-117.5 mt-auto pt-7.5 text-[#77777e] text-center text-[9px] leading-[1.7]">
-          Ao continuar, você concorda com nossos{" "}
-          <a
-            href="#termos"
-            className="text-[#ef737b] no-underline hover:underline"
-          >
-            Termos de uso
-          </a>{" "}
-          e{" "}
-          <a
-            href="#privacidade"
-            className="text-[#ef737b] no-underline hover:underline"
-          >
-            Política de privacidade
-          </a>
-          .
-        </footer>
       </section>
     </main>
   );

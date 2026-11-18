@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../api/endpoints/auth";
+import { useAuth } from "../auth/AuthContext";
 
 function Cadastro() {
   const navigate = useNavigate();
+
+  const { login } = useAuth();
+
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [erro, setErro] = useState("");
   const [form, setForm] = useState({
@@ -10,18 +15,17 @@ function Cadastro() {
     email: "",
     senha: "",
     confirmarSenha: "",
-    termos: false,
   });
 
   function atualizarCampo(event) {
-    const { name, value, checked, type } = event.target;
+    const { name, value } = event.target;
     setForm((anterior) => ({
       ...anterior,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   }
 
-  function enviarFormulario(event) {
+  async function enviarFormulario(event) {
     event.preventDefault();
     setErro("");
 
@@ -34,20 +38,31 @@ function Cadastro() {
       setErro("Preencha todos os campos para criar sua conta.");
       return;
     }
+
     if (form.senha.length < 8) {
       setErro("Sua senha precisa ter pelo menos 8 caracteres.");
       return;
     }
+
     if (form.senha !== form.confirmarSenha) {
       setErro("As senhas informadas não coincidem.");
       return;
     }
-    if (!form.termos) {
-      setErro("É necessário aceitar os termos para continuar.");
-      return;
-    }
 
-    setErro("O cadastro ainda não está conectado ao servidor.");
+    try {
+      await registerUser(form.nome, form.email, form.senha);
+      await login(form.email, form.senha);
+      navigate("/");
+    } catch (err) {
+      if (err.response) {
+        const { detail } = err.response.data;
+        setErro(detail);
+
+        return;
+      }
+
+      setErro("Erro de servidor. Tente novamente mais tarde");
+    }
   }
 
   return (
@@ -57,7 +72,7 @@ function Cadastro() {
         aria-label="Apresentação do Colosys"
       >
         <Link
-          to="/login"
+          to="/"
           className="inline-flex items-center gap-3 w-fit text-[27px] font-[850] tracking-[-1.3px] text-inherit no-underline"
           aria-label="Colosys — página inicial"
         >
@@ -65,7 +80,7 @@ function Cadastro() {
             <i className="fa-solid fa-route" />
           </span>
           <span>
-            colosys<span className="text-[#f05b61]">.</span>
+            Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
         </Link>
 
@@ -114,7 +129,7 @@ function Cadastro() {
             <i className="fa-solid fa-route" />
           </span>
           <span>
-            colosys<span className="text-[#f05b61]">.</span>
+            Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
         </div>
 
@@ -225,36 +240,6 @@ function Cadastro() {
                 className="w-full min-w-0 h-10.75 border-0 outline-0 text-[#f4f4f5] bg-transparent text-[12px] placeholder:text-[#88888e]"
               />
             </div>
-
-            <label className="flex items-start gap-2.5 my-2 mb-0.75 text-[#b8b8bd] text-[10px] leading-[1.6] cursor-pointer select-none">
-              <input
-                type="checkbox"
-                name="termos"
-                checked={form.termos}
-                onChange={atualizarCampo}
-                className="absolute w-px h-px opacity-0 peer"
-              />
-              <span className="w-4 h-4 grid shrink-0 place-items-center mt-px border border-[#68686e] rounded-sm text-transparent text-[9px] bg-[#414143] peer-checked:border-vermelho-medio peer-checked:text-white peer-checked:bg-vermelho-medio peer-focus-visible:outline-2 peer-focus-visible:outline-[#f06a72] peer-focus-visible:outline-offset-2">
-                <i className="fa-solid fa-check" />
-              </span>
-              <span>
-                Li e aceito os{" "}
-                <a
-                  href="#termos"
-                  className="text-[#ef737b] no-underline hover:underline"
-                >
-                  Termos de uso
-                </a>{" "}
-                e a{" "}
-                <a
-                  href="#privacidade"
-                  className="text-[#ef737b] no-underline hover:underline"
-                >
-                  Política de privacidade
-                </a>
-                .
-              </span>
-            </label>
 
             {erro && (
               <p

@@ -1,12 +1,28 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function BuscaTrajeto() {
   const navigate = useNavigate();
 
+  const camposRef = useRef(null);
+
   const [origem, setOrigem] = useState("");
   const [destino, setDestino] = useState("");
   const [campoAtivo, setCampoAtivo] = useState("");
+
+  useEffect(() => {
+    const handleClickFora = (e) => {
+      if (camposRef.current && !camposRef.current.contains(e.target)) {
+        setCampoAtivo("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickFora);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickFora);
+    };
+  }, []);
 
   const sugestoes = [
     { nome: "Estação Corinthians-Itaquera", tipo: "Metrô" },
@@ -52,64 +68,70 @@ function BuscaTrajeto() {
           Encontre o melhor caminho para sua viagem.
         </p>
 
-        <div className="relative mb-4">
-          <label className="block text-sm mb-2">Origem</label>
+        <div ref={camposRef}>
+          <div className="relative mb-4">
+            <label className="block text-sm mb-2">Origem</label>
 
-          <input
-            type="text"
-            value={origem}
-            onChange={(e) => setOrigem(e.target.value)}
-            onFocus={() => setCampoAtivo("origem")}
-            onBlur={() => setCampoAtivo("")}
-            placeholder="Digite sua localização"
-            className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
-          />
+            <input
+              type="text"
+              value={origem}
+              onChange={(e) => setOrigem(e.target.value)}
+              onFocus={() => setCampoAtivo("origem")}
+              // onBlur={() => setCampoAtivo("")}
+              placeholder="Digite sua localização"
+              className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
+            />
 
-          {campoAtivo === "origem" && (
-            <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
-              {filtrarSugestoes(origem).map((item) => (
-                <button
-                  key={item.nome}
-                  type="button"
-                  onClick={() => selecionarSugestao(item.nome)}
-                  className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
-                >
-                  <span className="block font-medium">{item.nome}</span>
-                  <span className="text-sm text-cinza-escuro">{item.tipo}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+            {campoAtivo === "origem" && (
+              <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
+                {filtrarSugestoes(origem).map((item) => (
+                  <button
+                    key={item.nome}
+                    type="button"
+                    onClick={() => selecionarSugestao(item.nome)}
+                    className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
+                  >
+                    <span className="block font-medium">{item.nome}</span>
+                    <span className="text-sm text-cinza-escuro">
+                      {item.tipo}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="relative mb-5">
-          <label className="block text-sm mb-2">Destino</label>
+          <div className="relative mb-5">
+            <label className="block text-sm mb-2">Destino</label>
 
-          <input
-            type="text"
-            value={destino}
-            onChange={(e) => setDestino(e.target.value)}
-            onFocus={() => setCampoAtivo("destino")}
-            onBlur={() => setCampoAtivo("")}
-            placeholder="Digite seu destino"
-            className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
-          />
+            <input
+              type="text"
+              value={destino}
+              onChange={(e) => setDestino(e.target.value)}
+              onFocus={() => setCampoAtivo("destino")}
+              // onBlur={() => setCampoAtivo("")}
+              placeholder="Digite seu destino"
+              className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
+            />
 
-          {campoAtivo === "destino" && (
-            <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
-              {filtrarSugestoes(destino).map((item) => (
-                <button
-                  key={item.nome}
-                  type="button"
-                  onClick={() => selecionarSugestao(item.nome)}
-                  className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
-                >
-                  <span className="block font-medium">{item.nome}</span>
-                  <span className="text-sm text-cinza-escuro">{item.tipo}</span>
-                </button>
-              ))}
-            </div>
-          )}
+            {campoAtivo === "destino" && (
+              <div className="absolute z-20 w-full mt-2 bg-fundo-input text-texto-input rounded-xl shadow-lg overflow-hidden">
+                {filtrarSugestoes(destino).map((item) => (
+                  <button
+                    key={item.nome}
+                    type="button"
+                    onClick={() => selecionarSugestao(item.nome)}
+                    className="w-full text-left p-3 hover:bg-fundo-input-hover border-b border-cinza-claro"
+                  >
+                    <span className="block font-medium">{item.nome}</span>
+                    <span className="text-sm text-cinza-escuro">
+                      {item.tipo}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <button
