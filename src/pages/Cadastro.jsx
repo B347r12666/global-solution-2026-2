@@ -76,9 +76,12 @@ function Cadastro() {
           className="inline-flex items-center gap-3 w-fit text-[27px] font-[850] tracking-[-1.3px] text-inherit no-underline"
           aria-label="Colosys — página inicial"
         >
-          <span className="w-10.5 h-10.5 grid place-items-center rounded-[13px] text-white text-[18px] bg-linear-to-br from-vermelho-claro to-vermelho-escuro shadow-[0_8px_22px_rgba(0,0,0,0.22)]">
-            <i className="fa-solid fa-route" />
-          </span>
+          <img
+            src="/logo_branco.png"
+            alt="logo-colosys"
+            height="22px"
+            width="22px"
+          />
           <span>
             Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
@@ -124,10 +127,13 @@ function Cadastro() {
       </section>
 
       <section className="min-h-screen flex flex-col items-center justify-center py-8.75 px-[clamp(30px,7vw,110px)] pb-4.5 bg-cor-de-fundo max-lg:py-11.25 max-lg:px-11.25 max-sm:min-h-screen max-sm:py-6 max-sm:px-4.25">
-        <div className="hidden max-sm:inline-flex items-center self-start mb-6 text-[23px] font-[850] tracking-[-1.3px] text-inherit no-underline">
-          <span className="w-9.25 h-9.25 grid place-items-center rounded-[11px] text-white text-[16px] bg-linear-to-br from-vermelho-claro to-vermelho-escuro shadow-[0_8px_22px_rgba(0,0,0,0.22)] mr-3">
-            <i className="fa-solid fa-route" />
-          </span>
+        <div className="hidden max-sm:inline-flex items-center self-start mb-6 text-[23px] font-[850] tracking-[-1.3px] text-inherit no-underline gap-3">
+          <img
+            src="/logo_vermelho.png"
+            alt="logo-colosys"
+            height="22px"
+            width="22px"
+          />
           <span>
             Colosys Argos<span className="text-[#f05b61]">.</span>
           </span>
