@@ -1,27 +1,55 @@
-import { useState } from 'react'
+import { useState } from "react";
+import {
+  desfavoritarTrajeto,
+  favoritarTrajeto,
+} from "../api/endpoints/favoritos";
 
-function RotaCard({ origem, destino, transporte, tempo, favorito = false }) {
+function RotaCard({
+  id,
+  origem,
+  destino,
+  transporte,
+  tempo,
+  favorito = false,
+}) {
+  const [curtido, setCurtido] = useState(favorito);
+  const [carregando, setCarregando] = useState(false);
 
-  const [curtido, setCurtido] = useState(favorito)
+  const favoritar = async () => {
+    if (carregando) return;
+
+    try {
+      setCarregando(true);
+
+      if (curtido) {
+        await desfavoritarTrajeto(id);
+        setCurtido(false);
+      } else {
+        await favoritarTrajeto(origem, destino, transporte, tempo);
+        setCurtido(true);
+      }
+    } catch (err) {
+      console.error("Erro ao favoritar/desfavoritar: ", err);
+    } finally {
+      setCarregando(false);
+    }
+  };
 
   return (
     <>
       <div className="flex flex-col gap-4 bg-cinza-escuro text-white rounded-2xl p-4 border border-cinza-claro lg:mt-5 w-full max-w-87.5 lg:max-w-none lg:mx-auto">
-
         <div className="flex items-center justify-between italic">
-          <span className="text-sm font-semibold text-titulo">
-            Trajeto
-          </span>
+          <span className="text-sm font-semibold text-titulo">Trajeto</span>
 
           <i
-            onClick={() => setCurtido(!curtido)}
-            className={`fa-solid fa-heart cursor-pointer transition-colors ${curtido ? 'text-vermelho-medio' : 'text-cinza-medio'
-              }`}
+            onClick={favoritar}
+            className={`fa-solid fa-heart cursor-pointer transition-colors ${
+              curtido ? "text-vermelho-medio" : "text-cinza-medio"
+            }`}
           ></i>
         </div>
 
         <div className="flex flex-col gap-3">
-
           <div className="flex items-center gap-3">
             <i className="fa-solid fa-circle-dot text-green-500"></i>
             <div>
@@ -37,7 +65,6 @@ function RotaCard({ origem, destino, transporte, tempo, favorito = false }) {
               <p className="text-sm font-semibold">{destino}</p>
             </div>
           </div>
-
         </div>
 
         <div className="flex items-center justify-between border-t border-cinza-claro pt-3">
@@ -48,13 +75,12 @@ function RotaCard({ origem, destino, transporte, tempo, favorito = false }) {
 
           <span className="flex items-center gap-2 text-xs text-cinza-medio">
             <i className="fa-regular fa-clock"></i>
-            {tempo || '--'}
+            {tempo || "--"}
           </span>
         </div>
-
       </div>
     </>
-  )
+  );
 }
 
-export default RotaCard
+export default RotaCard;
