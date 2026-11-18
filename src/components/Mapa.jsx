@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
 import L from "leaflet";
 
 const iconeOrigem = L.divIcon({
@@ -15,8 +21,11 @@ const iconeDestino = L.divIcon({
   iconAnchor: [15, 35],
 });
 
-function Mapa() {
+function Mapa({ origem, destino, shapes, cor }) {
   const centro = [-23.5505, -46.6333];
+
+  console.log(origem);
+  console.log(destino);
 
   return (
     <>
@@ -41,9 +50,21 @@ function Mapa() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <Marker position={centro} icon={iconeOrigem}>
-              <Popup>Origem</Popup>
+            <Marker position={origem.coord} icon={iconeOrigem}>
+              <Popup>
+                <strong>{origem.local}</strong>
+              </Popup>
             </Marker>
+
+            <Marker position={destino.coord} icon={iconeDestino}>
+              <Popup>
+                <strong>{destino.local}</strong>
+              </Popup>
+            </Marker>
+
+            {shapes.length > 0 && (
+              <Polyline positions={shapes} pathOptions={{ color: cor }} />
+            )}
           </MapContainer>
         </div>
       </section>

@@ -32,8 +32,6 @@ function Login() {
       await login(form.email, form.senha);
       navigate("/");
     } catch (err) {
-      console.log(err);
-
       if (err.response) {
         const { detail } = err.response.data;
         setErro(detail);

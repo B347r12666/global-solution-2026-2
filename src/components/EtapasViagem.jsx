@@ -1,7 +1,22 @@
+import { useState } from "react";
+
 function EtapasViagem({ etapas = [] }) {
+  const [curtido, setCurtido] = useState(false);
+
   return (
     <>
       <section className="flex flex-col gap-5 bg-cinza-escuro text-white rounded-2xl p-5">
+        <div className="flex items-center justify-between italic">
+          <span className="text-sm font-semibold text-titulo">Trajeto</span>
+
+          <i
+            onClick={() => setCurtido(!curtido)}
+            className={`fa-solid fa-heart cursor-pointer transition-colors ${
+              curtido ? "text-vermelho-medio" : "text-cinza-medio"
+            }`}
+          ></i>
+        </div>
+
         <div>
           <h2 className="text-lg font-bold text-titulo">Etapas da viagem</h2>
 

@@ -73,7 +73,7 @@ function BuscaTrajeto() {
   };
 
   const buscarTrajeto = () => {
-    if (!origem.trim() || !destino.trim()) return;
+    if (!origemSelecionada || !destinoSelecionado) return;
 
     navigate("/rotas", {
       state: { origemSelecionada, destinoSelecionado },
@@ -96,7 +96,10 @@ function BuscaTrajeto() {
             <input
               type="text"
               value={origem}
-              onChange={(e) => setOrigem(e.target.value)}
+              onChange={(e) => {
+                setOrigem(e.target.value);
+                setOrigemSelecionada(null);
+              }}
               onFocus={() => setCampoAtivo("origem")}
               placeholder="Digite sua localização"
               className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
@@ -135,7 +138,10 @@ function BuscaTrajeto() {
             <input
               type="text"
               value={destino}
-              onChange={(e) => setDestino(e.target.value)}
+              onChange={(e) => {
+                setDestino(e.target.value);
+                setDestinoSelecionado(null);
+              }}
               onFocus={() => setCampoAtivo("destino")}
               placeholder="Digite seu destino"
               className="w-full rounded-xl bg-fundo-input text-texto-input p-3 outline-none focus:ring-2 focus:ring-vermelho-medio"
@@ -172,7 +178,7 @@ function BuscaTrajeto() {
         <button
           type="button"
           onClick={buscarTrajeto}
-          disabled={!origem.trim() || !destino.trim()}
+          disabled={!origemSelecionada || !destinoSelecionado}
           className="w-full bg-vermelho-escuro hover:bg-sombra-vermelho disabled:opacity-40 disabled:cursor-not-allowed rounded-xl p-3 font-bold transition"
         >
           <i className="fa-solid fa-route mr-2"></i>
