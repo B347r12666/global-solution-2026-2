@@ -3,9 +3,10 @@ import RotaCard from "../components/RotaCard";
 import LinhaCard from "../components/LinhaCard";
 import { listarFavoritos } from "../api/endpoints/favoritos";
 import { useAuth } from "../auth/AuthContext";
+import { apiClient } from "../api/apiClient";
 
 function Favoritos() {
-  const {isAuthenticated} = useAuth()
+  const { isAuthenticated, authLoading } = useAuth();
 
   const [filtro, setFiltro] = useState("Todos");
   const [carregando, setCarregando] = useState(false);
@@ -15,10 +16,19 @@ function Favoritos() {
   const [trajetosFavoritos, setTrajetosFavoritos] = useState([]);
 
   useEffect(() => {
+    if (authLoading || !isAuthenticated) return;
+
     const buscarFavoritos = async () => {
       try {
         setCarregando(true);
         setErro("");
+
+        console.log("Autenticado:", isAuthenticated);
+        console.log("Token:", localStorage.getItem("@App:token"));
+        console.log(
+          "Header Axios:",
+          apiClient.defaults.headers.common["Authorization"],
+        );
 
         const res = await listarFavoritos();
 
@@ -33,7 +43,7 @@ function Favoritos() {
     };
 
     buscarFavoritos();
-  }, []);
+  }, [authLoading, isAuthenticated]);
 
   const filtros = ["Todos", "Trajetos", "Linhas"];
 
@@ -55,7 +65,11 @@ function Favoritos() {
           </div>
         </section>
 
-        {!isAuthenticated ? (
+        {authLoading ? (
+          <p className="text-center text-cinza-medio py-8">
+            Verificando autenticação...
+          </p>
+        ) : !isAuthenticated ? (
           <p className="text-center text-cinza-medio py-8">
             Crie uma conta para favoritar linhas e trajetos
           </p>

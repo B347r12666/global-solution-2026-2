@@ -1,31 +1,39 @@
 import { useState, useEffect } from "react";
 import { AuthContext } from "./AuthContext";
 import { loginUser } from "../api/endpoints/auth";
-import axios from "axios";
 import { apiClient } from "../api/apiClient";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    // Carrega os dados salvos ao iniciar a aplicação
-    const storedToken = localStorage.getItem("@App:token");
-    const storedUser = localStorage.getItem("@App:user");
+    const carregarAutenticacao = () => {
+      try {
+        const storedToken = localStorage.getItem("@App:token");
+        const storedUser = localStorage.getItem("@App:user");
 
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+        if (storedToken && storedUser) {
+          const parsedUser = JSON.parse(storedUser);
+
+          setToken(storedToken);
+          setUser(parsedUser);
+        }
+      } catch (error) {
+        console.error("Erro ao recuperar autenticação:", error);
+
+        localStorage.removeItem("@App:token");
+        localStorage.removeItem("@App:user");
+
+        delete apiClient.defaults.headers.common["Authorization"];
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+
+    carregarAutenticacao();
   }, []);
-
-  useEffect(() => {
-    if (token) {
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    } else {
-      delete apiClient.defaults.headers.common["Authorization"];
-    }
-  }, [token]);
 
   const login = async (email, senha) => {
     const res = await loginUser(email, senha);
@@ -50,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     user,
     token,
     isAuthenticated: !!token,
+    authLoading,
     login,
     logout,
   };
