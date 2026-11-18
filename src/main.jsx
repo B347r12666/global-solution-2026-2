@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./index.css";
-import { AuthProvider } from "./auth/authProvider";
+import { AuthProvider } from "./auth/AuthProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
