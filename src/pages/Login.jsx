@@ -34,7 +34,12 @@ function Login() {
     } catch (err) {
       if (err.response) {
         const { detail } = err.response.data;
-        setErro(detail);
+
+        if (typeof detail === "string") {
+          setErro(detail);
+        } else {
+          setErro("Email inválido");
+        }
 
         return;
       }
